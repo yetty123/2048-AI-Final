@@ -6,6 +6,43 @@ function Grid(size) {
   this.playerTurn = true;
 }
 
+// Check if there are any cells available
+Grid.prototype.cellsAvailable = function () {
+  return !!this.availableCells().length;
+};
+
+// Check if the specified cell is taken
+Grid.prototype.cellAvailable = function (cell) {
+  return !this.cellOccupied(cell);
+};
+
+Grid.prototype.cellOccupied = function (cell) {
+  return !!this.cellContent(cell);
+};
+
+Grid.prototype.cellContent = function (cell) {
+  if (this.withinBounds(cell)) {
+    return this.cells[cell.x][cell.y];
+  } else {
+    return null;
+  }
+};
+
+Grid.prototype.toString = function() {
+  string = '';
+  for (var i=0; i<4; i++) {
+    for (var j=0; j<4; j++) {
+      if (this.cells[j][i]) {
+        string += this.cells[j][i].value + ' ';
+      } else {
+        string += '_ ';
+      }
+    }
+    string += '\n';
+  }
+  return string;
+}
+
 // pre-allocate the grid
 Grid.prototype.indexes = [];
 for (var x=0; x<4; x++) {
@@ -55,28 +92,6 @@ Grid.prototype.eachCell = function (callback) {
     for (var y = 0; y < this.size; y++) {
       callback(x, y, this.cells[x][y]);
     }
-  }
-};
-
-// Check if there are any cells available
-Grid.prototype.cellsAvailable = function () {
-  return !!this.availableCells().length;
-};
-
-// Check if the specified cell is taken
-Grid.prototype.cellAvailable = function (cell) {
-  return !this.cellOccupied(cell);
-};
-
-Grid.prototype.cellOccupied = function (cell) {
-  return !!this.cellContent(cell);
-};
-
-Grid.prototype.cellContent = function (cell) {
-  if (this.withinBounds(cell)) {
-    return this.cells[cell.x][cell.y];
-  } else {
-    return null;
   }
 };
 
@@ -285,21 +300,6 @@ Grid.prototype.tileMatchesAvailable = function () {
 Grid.prototype.positionsEqual = function (first, second) {
   return first.x === second.x && first.y === second.y;
 };
-
-Grid.prototype.toString = function() {
-  string = '';
-  for (var i=0; i<4; i++) {
-    for (var j=0; j<4; j++) {
-      if (this.cells[j][i]) {
-        string += this.cells[j][i].value + ' ';
-      } else {
-        string += '_ ';
-      }
-    }
-    string += '\n';
-  }
-  return string;
-}
 
 // counts the number of isolated groups. 
 Grid.prototype.islands = function() {
