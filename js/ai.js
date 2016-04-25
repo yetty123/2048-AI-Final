@@ -13,6 +13,7 @@ AI.prototype.iterativeDeep = function() {
   var depth = 0;
   var best;
   do {
+    //calls minimax with aplha-beta
     var newBest = this.search(depth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, 0 ,0);
     if (newBest.move == -1) {
       break;
